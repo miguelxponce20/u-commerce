@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <?php
+  // Codigo para iniciar sesion
   session_start();
+
+  session_regenerate_id(true);
+
+  if(isset($_REQUEST['sesion']) && $_REQUEST['sesion']=="cerrar"){
+    session_destroy();
+    header("location:index.php");
+  }
   if(isset($_SESSION['id'])==false){
     header("location:index.php");
   }
@@ -34,6 +42,8 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -55,8 +65,11 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
-        <a class="nav-link" href="editarPerfil.php">
+        <a class="nav-link" href="panel.php?modulo=editarUsuario&id=<?php echo $_SESSION['id']; ?>">
           <i class="far fa-user"></i>
+        </a>
+        <a class="nav-link text-primary" href="panel.php?modulo=&sesion=cerrar" title="Cerrar Sesion">
+          <i class="fas fa-door-closed"></i>
         </a>
     </ul>
   </nav>
@@ -114,7 +127,8 @@
               </li>
               <li class="nav-item">
                 <a href="panel.php?modulo=usuarios" 
-                class="nav-link <?php echo ($modulo=="usuarios")?" active": " "; ?>">
+                class="nav-link <?php echo ($modulo=="usuarios" || $modulo=="crearUsuario" || 
+                $modul0=="editarUsuario")?" active": " "; ?>">
                   <i class="far fa-user nav-icon"></i>
                   <p>Usuarios</p>
                 </a>
@@ -140,7 +154,19 @@
     <!-- /.sidebar -->
   </aside>
 
+<?php
+if(isset($_REQUEST['mensaje'])){
+  ?>  
+  <div class="alert alert-primary alert-dismissible fade show float-right" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <?php echo $_REQUEST['mensaje'] ?>
+  </div>
+
   <?php
+}
   if($modulo=="estadisticas" || $modulo==""){
     include_once "estadisticas.php";
   }
@@ -152,6 +178,12 @@
   }
   elseif($modulo=="ventas"){
     include_once "ventas.php";
+  }
+  elseif($modulo=="crearUsuario"){
+    include_once "crearUsuario.php";
+  }
+  elseif($modulo=="editarUsuario"){
+    include_once "editarUsuario.php";
   }
   
     
@@ -194,5 +226,33 @@
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(function () {
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+<script>
+  $(document).ready(function(){
+    $(".borrar").click(function(e){
+      e.preventDefault();
+      var res=confirm("¿Desea borrar el usuario?");
+      if(res==true){
+        var link=$(this).attr("href");
+        window.location=link;
+      }
+    })
+  })
+</script>
 </body>
 </html>
