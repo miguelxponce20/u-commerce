@@ -43,7 +43,14 @@
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
   <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <!-- <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"> -->
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.dataTables.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.dataTables.css">
+  <link rel="stylesheet" href="css/editor.dataTables.min.css">
+  
+  
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -185,6 +192,9 @@ if(isset($_REQUEST['mensaje'])){
   elseif($modulo=="editarUsuario"){
     include_once "editarUsuario.php";
   }
+  elseif($modulo=="productos"){
+    include_once "productos.php";
+  }
   
     
   ?>
@@ -227,8 +237,15 @@ if(isset($_REQUEST['mensaje'])){
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
 <!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script> -->
+
+
+<script src="https://cdn.datatables.net/2.1.7/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.min.js"></script>
+<script src="js/dataTables.editor.min.js"></script>
+
 <script>
   $(function () {
     $('#example2').DataTable({
@@ -240,6 +257,42 @@ if(isset($_REQUEST['mensaje'])){
       "autoWidth": false,
       "responsive": true,
     });
+
+    // Vinculo del Backend con la base de datos
+    const editor = new DataTable.Editor({
+    ajax: 'controllers/productos.php',
+    table: "#tablaProductos",
+    fields: [
+        {
+            label: 'Nombre:',
+            name: 'nombre'
+        },
+        {
+            label: 'Precio:',
+            name: 'precio'
+        },
+        {
+            label: 'Existencia:',
+            name: 'existencia'
+        }
+    ]
+});
+ 
+new DataTable('#tablaProductos', {
+    dom: "Bfrtip",
+    ajax: 'controllers/productos.php',
+    columns: [
+        { data: 'nombre' },
+        { data: 'precio', render: DataTable.render.number(null, null, 0, '$') },
+        { data: 'existencia' },
+    ],
+    select: true,
+            buttons: [
+                { extend: 'create', editor: editor },
+                { extend: 'edit', editor: editor },
+                { extend: 'remove', editor: editor }
+            ]
+  });
   });
 </script>
 <script>

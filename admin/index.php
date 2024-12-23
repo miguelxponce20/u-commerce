@@ -15,15 +15,15 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page bg-dark">
 <div class="login-box">
-  <div class="login-logo">
-    <a href="../../index2.html"><b>U-</b>commerce</a>
+  <div class="login-logo ">
+    <h1 class="text-white"><b>U-</b>commerce</h1>
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Inicia sesión</p>
+      <h4 class="login-box-msg text-primary">Inicia sesion</h4>
 
 <?php
     if(isset($_REQUEST['login'])){
@@ -65,7 +65,7 @@
     }
 ?>
 
-      <form method="post">
+      <form method="post" >
         <div class="input-group mb-3">
           <input type="email" class="form-control" placeholder="Email" name="email">
           <div class="input-group-append">

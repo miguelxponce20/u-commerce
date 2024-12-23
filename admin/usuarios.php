@@ -62,7 +62,6 @@
                         // Construccion y ejecucion de la consulta
                         $query="SELECT id,email,nombre from usuarios";
                         $result=mysqli_query($con,$query);
-                        $result=mysqli_query($con,$query);
 
                         while($row=mysqli_fetch_assoc($result)){
                         ?>
